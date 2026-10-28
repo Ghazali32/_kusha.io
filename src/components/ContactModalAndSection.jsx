@@ -133,20 +133,6 @@ export function ContactModalAndSection({
           </div>
 
         </div>
-
-        <style>{`
-          @media (max-width: 900px) {
-            .contact-main-grid {
-              grid-template-columns: repeat(1, 1fr) !important;
-            }
-            .contact-main-grid > div {
-              grid-column: span 1 !important;
-            }
-            .contact-subgrid {
-              grid-template-columns: repeat(1, 1fr) !important;
-            }
-          }
-        `}</style>
         </section>
       )}
 

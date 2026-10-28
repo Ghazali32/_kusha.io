@@ -30,49 +30,6 @@ export function WebsiteDevelopmentPage({ onOpenContact: propOnOpenContact }) {
   const onOpenContact = propOnOpenContact || ui.handleOpenContact;
   const [activeFaq, setActiveFaq] = useState(null);
 
-  // 12. SEO Metadata & Canonical Management
-  useEffect(() => {
-    const originalTitle = document.title;
-    document.title = "Website Development Company | Kusha.io";
-
-    // Set page-specific meta description
-    let metaDesc = document.querySelector('meta[name="description"]');
-    const originalDesc = metaDesc ? metaDesc.getAttribute('content') : null;
-    if (metaDesc) {
-      metaDesc.setAttribute(
-        'content', 
-        'Looking for a website development company? Kusha.io helps businesses build new websites, redesign existing sites and develop custom website functionality.'
-      );
-    }
-
-    // Set canonical link
-    let canonicalLink = document.querySelector('link[rel="canonical"]');
-    let createdCanonical = false;
-    if (!canonicalLink) {
-      canonicalLink = document.createElement('link');
-      canonicalLink.setAttribute('rel', 'canonical');
-      document.head.appendChild(canonicalLink);
-      createdCanonical = true;
-    }
-    const originalCanonical = canonicalLink.getAttribute('href');
-    canonicalLink.setAttribute('href', 'https://www.kusha.io/services/website-development');
-
-    // Clean up on component unmount
-    return () => {
-      document.title = originalTitle;
-      if (metaDesc && originalDesc) {
-        metaDesc.setAttribute('content', originalDesc);
-      }
-      if (canonicalLink) {
-        if (createdCanonical) {
-          canonicalLink.remove();
-        } else if (originalCanonical) {
-          canonicalLink.setAttribute('href', originalCanonical);
-        }
-      }
-    };
-  }, []);
-
   // CTA Click Handler with Analytics Measurement
   const handleCtaClick = (source = 'hero') => {
     if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
@@ -245,7 +202,7 @@ export function WebsiteDevelopmentPage({ onOpenContact: propOnOpenContact }) {
           4. HERO SECTION
          ========================================================================= */}
       <section style={{ position: 'relative', paddingBottom: '70px', overflow: 'hidden' }}>
-        {/* Subtle ambient lighting */}
+        {/* Subtle ambient lighting - CSS radial gradient without GPU blur filter overhead */}
         <div 
           style={{
             position: 'absolute',
@@ -254,8 +211,7 @@ export function WebsiteDevelopmentPage({ onOpenContact: propOnOpenContact }) {
             transform: 'translateX(-50%)',
             width: '760px',
             height: '420px',
-            background: 'radial-gradient(ellipse at center, rgba(212, 255, 79, 0.1) 0%, rgba(139, 123, 247, 0.05) 50%, transparent 70%)',
-            filter: 'blur(75px)',
+            background: 'radial-gradient(ellipse at center, rgba(212, 255, 79, 0.08) 0%, rgba(139, 123, 247, 0.04) 40%, transparent 70%)',
             pointerEvents: 'none',
             zIndex: 0
           }}
@@ -878,26 +834,6 @@ export function WebsiteDevelopmentPage({ onOpenContact: propOnOpenContact }) {
         </div>
       </section>
 
-      {/* Responsive media query adjustments */}
-      <style>{`
-        @media (max-width: 1024px) {
-          .services-twocol-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .process-horizontal-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .solutions-three-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .why-consider-grid > div {
-            grid-column: span 12 !important;
-          }
-          .contact-main-grid > div {
-            grid-column: span 12 !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

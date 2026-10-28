@@ -6,23 +6,22 @@ import { ClientLayout } from '../src/components/ClientLayout';
 
 const outfit = Outfit({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800', '900'],
   variable: '--font-display',
   display: 'swap',
 });
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800'],
   variable: '--font-sans',
   display: 'swap',
 });
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
+  weight: ['400', '600'],
   variable: '--font-mono',
   display: 'swap',
+  preload: false,
 });
 
 export const metadata = {
@@ -97,25 +96,42 @@ export default function RootLayout({ children }) {
       className={`${plusJakartaSans.variable} ${outfit.variable} ${jetbrainsMono.variable}`}
     >
       <head>
-        {/* Google Tag Manager */}
-        <Script id="gtm-script" strategy="afterInteractive">
-          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-          })(window,document,'script','dataLayer','GTM-M77HWJ4W');`}
-        </Script>
+        {/* Optimized Analytics Loader: Stubs dataLayer/gtag immediately, defers heavy GTM/Google Ads network scripts to user interaction or idle timer */}
+        <Script id="analytics-loader" strategy="afterInteractive">
+          {`(function() {
+            var loaded = false;
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = window.gtag || function(){window.dataLayer.push(arguments);};
+            gtag('js', new Date());
 
-        {/* Google tag (gtag.js) for Google Ads */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-18499353482"
-          strategy="afterInteractive"
-        />
-        <Script id="google-ads-gtag" strategy="afterInteractive">
-          {`window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'AW-18499353482');`}
+            function initAnalytics() {
+              if (loaded) return;
+              loaded = true;
+
+              // GTM Script
+              var gtmScript = document.createElement('script');
+              gtmScript.async = true;
+              gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-M77HWJ4W';
+              document.head.appendChild(gtmScript);
+
+              // Google Ads Script
+              var adsScript = document.createElement('script');
+              adsScript.async = true;
+              adsScript.src = 'https://www.googletagmanager.com/gtag/js?id=AW-18499353482';
+              document.head.appendChild(adsScript);
+              gtag('config', 'AW-18499353482');
+            }
+
+            // Trigger on early user interaction (scroll, touch, click, key) or idle after 3.5s
+            ['scroll', 'touchstart', 'mousemove', 'click', 'keydown'].forEach(function(evt) {
+              window.addEventListener(evt, initAnalytics, { once: true, passive: true });
+            });
+            if ('requestIdleCallback' in window) {
+              requestIdleCallback(function() { setTimeout(initAnalytics, 3500); });
+            } else {
+              setTimeout(initAnalytics, 3500);
+            }
+          })();`}
         </Script>
 
         {/* Structured Data: Organization Schema */}

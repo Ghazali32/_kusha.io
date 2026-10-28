@@ -220,16 +220,6 @@ export function Footer({ onOpenContact }) {
         </div>
       )}
 
-      <style>{`
-        @media (max-width: 900px) {
-          .footer-grid {
-            grid-template-columns: repeat(1, 1fr) !important;
-          }
-          .footer-grid > div {
-            grid-column: span 1 !important;
-          }
-        }
-      `}</style>
     </footer>
   );
 }

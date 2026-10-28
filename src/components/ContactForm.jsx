@@ -13,7 +13,6 @@ import {
   Clock,
   Check
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 import { 
   submitContactForm, 
   SERVICE_OF_INTEREST_OPTIONS, 

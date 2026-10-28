@@ -1,13 +1,27 @@
 'use client';
 
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { useUI } from '../context/UIContext';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { FloatingDock } from './FloatingDock';
-import { SearchModal } from './SearchModal';
-import { NotificationDrawer } from './NotificationDrawer';
-import { ContactModalAndSection } from './ContactModalAndSection';
+
+// Dynamically load heavy interactive modals only when opened to keep initial mobile bundle minimal
+const ContactModalAndSection = dynamic(
+  () => import('./ContactModalAndSection').then((m) => m.ContactModalAndSection),
+  { ssr: false }
+);
+
+const SearchModal = dynamic(
+  () => import('./SearchModal').then((m) => m.SearchModal),
+  { ssr: false }
+);
+
+const NotificationDrawer = dynamic(
+  () => import('./NotificationDrawer').then((m) => m.NotificationDrawer),
+  { ssr: false }
+);
 
 export function ClientLayout({ children }) {
   const {
@@ -35,14 +49,16 @@ export function ClientLayout({ children }) {
         {children}
       </main>
 
-      {/* Global Contact Modal (Triggered via Buttons / Navbar) */}
-      <ContactModalAndSection 
-        isOpen={contactModalOpen}
-        onClose={() => setContactModalOpen(false)}
-        initialType={contactType}
-        initialSubject={contactSubject}
-        modalOnly={true}
-      />
+      {/* Global Contact Modal (Triggered via Buttons / Navbar) - Rendered only when opened */}
+      {contactModalOpen && (
+        <ContactModalAndSection 
+          isOpen={contactModalOpen}
+          onClose={() => setContactModalOpen(false)}
+          initialType={contactType}
+          initialSubject={contactSubject}
+          modalOnly={true}
+        />
+      )}
 
       {/* Global Footer with KVK 98986708, GDPR, Legal, and Target Markets */}
       <Footer 
@@ -56,19 +72,23 @@ export function ClientLayout({ children }) {
         onOpenContact={handleOpenContact}
       />
 
-      {/* Global Spotlight Search Modal (⌘K) */}
-      <SearchModal 
-        isOpen={searchModalOpen}
-        onClose={() => setSearchModalOpen(false)}
-        onOpenContact={handleOpenContact}
-      />
+      {/* Global Spotlight Search Modal (⌘K) - Rendered only when opened */}
+      {searchModalOpen && (
+        <SearchModal 
+          isOpen={searchModalOpen}
+          onClose={() => setSearchModalOpen(false)}
+          onOpenContact={handleOpenContact}
+        />
+      )}
 
-      {/* Operational Feed / Notification Drawer */}
-      <NotificationDrawer 
-        isOpen={notificationsOpen}
-        onClose={() => setNotificationsOpen(false)}
-        onOpenContact={handleOpenContact}
-      />
+      {/* Operational Feed / Notification Drawer - Rendered only when opened */}
+      {notificationsOpen && (
+        <NotificationDrawer 
+          isOpen={notificationsOpen}
+          onClose={() => setNotificationsOpen(false)}
+          onOpenContact={handleOpenContact}
+        />
+      )}
     </div>
   );
 }

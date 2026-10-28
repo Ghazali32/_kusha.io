@@ -337,6 +337,7 @@ export function Navbar({ onOpenContact, onOpenSearch }) {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="dock-icon-btn mobile-toggle-btn"
             style={{ display: 'none' }}
+            aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
